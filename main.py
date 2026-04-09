@@ -73,6 +73,61 @@ def select_date_7_days_later(driver, wait):
     done_button.click()
     print("Date confirmed.")
 
+def book_slot_by_index(driver, wait, time_text, court_number):
+    slot_links = wait.until(
+        EC.presence_of_all_elements_located((By.PARTIAL_LINK_TEXT, time_text))
+    )
+
+    print("Found matching slots:", len(slot_links))
+
+    target_index = court_number - 1
+    target_slot = slot_links[target_index]
+
+    driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", target_slot)
+    time.sleep(0.5)
+    target_slot.click()
+    print(f"Clicked Court {court_number}, {time_text}")
+
+    time.sleep(1)
+
+    # Register button
+    register_button = wait.until(
+        EC.presence_of_element_located((
+            By.XPATH,
+            "//button[contains(., 'Register')]"
+        ))
+    )
+
+    driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", register_button)
+    time.sleep(1)
+    driver.execute_script("arguments[0].click();", register_button)
+
+    print("Clicked Register.")
+
+    # Select button
+    time.sleep(2)
+    select_button = wait.until(
+        EC.presence_of_element_located((
+            By.XPATH,
+            "//button[contains(., 'Select')]"
+        ))
+    )
+    driver.execute_script("arguments[0].click();", select_button)
+    print("Clicked Select.")
+
+    time.sleep(2)
+
+    add_to_cart_button = wait.until(
+        EC.presence_of_element_located((
+            By.XPATH,
+            "//button[contains(., 'Add to Cart')]"
+        ))
+    )
+    driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", add_to_cart_button)
+    time.sleep(0.5)
+    driver.execute_script("arguments[0].click();", add_to_cart_button)
+    print("Clicked Add to Cart.")
+
 def main():
     load_dotenv()
 
@@ -184,8 +239,10 @@ def main():
     bookingCourts_button.click()
     print("Clicked Badminton - Courts.")
 
-    wait_until_target_time(15, 9, 0)
-    select_date_7_days_later(driver, wait)
+    # wait_until_target_time(15, 9, 0)
+    # select_date_7_days_later(driver, wait)
+    
+    book_slot_by_index(driver, wait, "Apr 09 - 7:00 AM", 3) # Court 3, 7:00-8:00am on Apr 9
 
     input("Check result, then press Enter to close...")
     driver.quit()
