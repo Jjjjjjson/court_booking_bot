@@ -110,8 +110,16 @@ def main():
         ))
     )
     booking_button.click()
-
     print("Clicked Bookings & Registrations.")
+
+    # Click "Badminton - Courts"
+    bookingCourts_button = wait.until(
+        EC.element_to_be_clickable((
+            By.PARTIAL_LINK_TEXT, "Badminton - Courts"
+        ))
+    )
+    bookingCourts_button.click()
+    print("Clicked Badminton - Courts.")
 
     input("Check result, then press Enter to close...")
     driver.quit()
