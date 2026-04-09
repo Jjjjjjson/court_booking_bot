@@ -1,0 +1,41 @@
+# 🏸 Court Booking Bot (RA Centre)
+
+An automated Python bot that logs into the RA Centre system and navigates to the badminton court booking page.
+
+---
+
+## 🚀 Features
+
+- Automatically opens Chrome using Selenium
+- Logs into RA Centre account
+- Navigates to booking system
+- Structured for automation and scalability
+- Ready for multi-window booking (future enhancement)
+
+---
+
+## 🛠️ Tech Stack
+
+- Python 3
+- Selenium
+- WebDriver Manager
+- python-dotenv
+- VS Code
+
+---
+
+## 📦 Setup Instructions
+
+### 1. Clone the repository
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+cd YOUR_REPO_NAME
+
+### 2. Install dependencies
+- pip install selenium webdriver-manager python-dotenv
+
+### 3. Add your credentials in .env
+- RA_EMAIL=your_email_here
+- RA_PASSWORD=your_password_here
+
+### 4. Run the bot
+- python main.py
