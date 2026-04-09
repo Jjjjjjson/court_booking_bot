@@ -26,6 +26,53 @@ def wait_until_target_time(hour, minute, second):
     time.sleep(wait_seconds)
     print("Target time reached.")
 
+def select_date_7_days_later(driver, wait):
+    target_date = datetime.now() + timedelta(days=7)
+    target_day = str(target_date.day)
+
+    print("Selecting date:", target_date.strftime("%Y-%m-%d"))
+
+    time.sleep(2)
+
+    # find visible date input
+    inputs = driver.find_elements(By.TAG_NAME, "input")
+
+    date_box = None
+    for inp in inputs:
+        value = (inp.get_attribute("value") or "").strip()
+        if inp.is_displayed() and ("2026" in value or "Apr" in value or "April" in value):
+            date_box = inp
+            break
+
+    if date_box is None:
+        raise Exception("Could not find date box")
+
+    # open date picker
+    driver.execute_script("arguments[0].click();", date_box)
+    print("Date picker opened.")
+
+    time.sleep(1)
+
+    # click target day
+    day_button = wait.until(
+        EC.element_to_be_clickable((
+            By.XPATH,
+            f"//button[normalize-space()='{target_day}']"
+        ))
+    )
+    day_button.click()
+    print(f"Selected day: {target_day}")
+
+    # click Done
+    done_button = wait.until(
+        EC.element_to_be_clickable((
+            By.XPATH,
+            "//button[normalize-space()='Done']"
+        ))
+    )
+    done_button.click()
+    print("Date confirmed.")
+
 def main():
     load_dotenv()
 
@@ -137,7 +184,8 @@ def main():
     bookingCourts_button.click()
     print("Clicked Badminton - Courts.")
 
-    wait_until_target_time(14, 43, 0)
+    wait_until_target_time(15, 9, 0)
+    select_date_7_days_later(driver, wait)
 
     input("Check result, then press Enter to close...")
     driver.quit()
