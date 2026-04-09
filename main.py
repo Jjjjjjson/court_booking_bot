@@ -1,6 +1,7 @@
 import os
 import time
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -9,6 +10,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+# Function to wait until a specific time (default 9:00:00)
+def wait_until_target_time(hour, minute, second):
+    now = datetime.now()
+    target = now.replace(hour=hour, minute=minute, second=second, microsecond=0)
+
+    if now >= target:
+        print("Target time already passed for today.")
+        return
+
+    wait_seconds = (target - now).total_seconds()
+    print(f"Current time: {now.strftime('%H:%M:%S')}")
+    print(f"Waiting until: {target.strftime('%H:%M:%S')}")
+    print(f"Sleeping for {wait_seconds:.1f} seconds...")
+    time.sleep(wait_seconds)
+    print("Target time reached.")
 
 def main():
     load_dotenv()
@@ -120,6 +136,8 @@ def main():
     )
     bookingCourts_button.click()
     print("Clicked Badminton - Courts.")
+
+    wait_until_target_time(14, 43, 0)
 
     input("Check result, then press Enter to close...")
     driver.quit()
